@@ -24,39 +24,130 @@ while True:
             
             print("Button 1 klick")
             print("buttonValue: " + str(value))
+            
+            """
             if available_ports:
                 midiout.open_port(0)
                 with midiout:
                     note_on = [0x90, 60, 112] # channel 1, middle C, velocity 112
-                    note_off = [0x80, 60, 0]
+                    note_off = [0x80, 60, 0] 
                     midiout.send_message(note_on)
                     time.sleep(0.5)
                     midiout.send_message(note_off)
                     time.sleep(0.1)
+            """
         elif sig_value == 1:
             print("Button 2 klick")
+            print("buttonValue: " + str(value))
+            
+            """
+            if available_ports:
+                midiout.open_port(0)
+                with midiout:
+                    note_on = [0x90, 61, 112] # channel 1, middle D, velocity 112
+                    note_off = [0x80, 61, 0] 
+                    midiout.send_message(note_on)
+                    time.sleep(0.5)
+                    midiout.send_message(note_off)
+                    time.sleep(0.1)
+            """
         elif sig_value == 2:
             print("Button 3 klick")
+            print("buttonValue: " + str(value))
+            """
+            if available_ports:
+                midiout.open_port(0)
+                with midiout:
+                    note_on = [0x90, 62, 112] # channel 1, middle E, velocity 112
+                    note_off = [0x80, 62, 0] 
+                    midiout.send_message(note_on)
+                    time.sleep(0.5)
+                    midiout.send_message(note_off)
+                    time.sleep(0.1)
+            """
         elif sig_value == 3:
             ## hoch runter beschleunigen
             print("gyro-Y")
             print(value)
+    
+            """
+            if available_ports:
+                midiout.open_port(0)
+                with midiout:
+                    note_on = [0x90, 63, 112] # channel 1, middle F, velocity 112
+                    note_off = [0x80, 63, 0] 
+                    midiout.send_message(note_on)
+                    time.sleep(0.5)
+                    midiout.send_message(note_off)
+                    time.sleep(0.1)
+            """
         elif sig_value == 4:
             ## vor zurück beschleunigen
             print("gyro-Z")
             print(value)
+            
+            """
+            if available_ports:
+                midiout.open_port(0)
+                with midiout:
+                    note_on = [0x90, 64, 112] # channel 1, middle G, velocity 112
+                    note_off = [0x80, 64, 0] 
+                    midiout.send_message(note_on)
+                    time.sleep(0.5)
+                    midiout.send_message(note_off)
+                    time.sleep(0.1)
+            """
         elif sig_value == 5:
             ## vor zurück neigen
             print("acc-Y")
             print(value)
+            
+            """
+            if available_ports:
+                midiout.open_port(0)
+                with midiout:
+                    note_on = [0x90, 65, 112] # channel 1, middle A, velocity 112
+                    note_off = [0x80, 65, 0] 
+                    midiout.send_message(note_on)
+                    time.sleep(0.5)
+                    midiout.send_message(note_off)
+                    time.sleep(0.1)
+            """
+
         elif sig_value == 6:
             ## rechts links neigen
             print("acc-Z")
             print(value)
+            
+            """
+            if available_ports:
+                midiout.open_port(0)
+                with midiout:
+                    note_on = [0x90, 66, 112] # channel 1, middle H, velocity 112
+                    note_off = [0x80, 65, 0] 
+                    midiout.send_message(note_on)
+                    time.sleep(0.5)
+                    midiout.send_message(note_off)
+                    time.sleep(0.1)
+            """
+            
         elif sig_value == 7:
             ## bend sensor winkel
             print("bend")
             print(value)
+            
+            """
+            if available_ports:
+                midiout.open_port(0)
+                with midiout:
+                    note_on = [0x90, 67, 112] # channel 1, high C, velocity 112
+                    note_off = [0x80, 67, 0] 
+                    midiout.send_message(note_on)
+                    time.sleep(0.5)
+                    midiout.send_message(note_off)
+                    time.sleep(0.1)
+            """
+            
         else:
             print("!!!didnt match!!!")
 

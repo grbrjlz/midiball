@@ -16,10 +16,16 @@ const float R_DIV = 47500.0; // Measured resistance of 3.3k resistor
 const float STRAIGHT_RESISTANCE = 37300.0; // resistance when straight
 const float BEND_RESISTANCE = 90000.0; // resistance at 90 deg
 
-const int buttonPin = 2;     // the number of the pushbutton pin
+const int button1 = 2;     // the number of the pushbutton pin
+const int button2 = 3;     // the number of the pushbutton pin
+const int button3 = 4;     // the number of the pushbutton pin
 // variables will change:
-int buttonState = 0;         // variable for reading the pushbutton status
-boolean isPressed = false;
+int buttonState1 = 0;
+int buttonState2 = 0;
+int buttonState3 = 0;// variable for reading the pushbutton status
+boolean isPressed1 = false;
+boolean isPressed2 = false;
+boolean isPressed3 = false;
 
 
 void setup() {
@@ -27,7 +33,9 @@ void setup() {
   //pinMode(ledPin, OUTPUT);
   Serial.begin(9600);
   // initialize the pushbutton pin as an input:
-  pinMode(buttonPin, INPUT);
+  pinMode(button1, INPUT);
+  pinMode(button2, INPUT);
+  pinMode(button3, INPUT);
   pinMode(FLEX_PIN, INPUT);
   
   Wire.begin();
@@ -41,23 +49,60 @@ void setup() {
 
 void loop() {
 
-  // BUTTONS 
+  // BUTTONS
+  
+  // Button 1 
   // read the state of the pushbutton value:
-  buttonState = digitalRead(buttonPin);
-  //Serial.println(buttonState);
+  buttonState1 = digitalRead(button1);
   // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
-  if (buttonState == HIGH) {
-    isPressed = true;   
+  if (buttonState1 == HIGH) {
+    isPressed1 = true;   
     // turn LED on:
     //digitalWrite(ledPin, HIGH);
   } else {
-    if (isPressed == true) {
+    if (isPressed1 == true) {
       int sig = 0;
       int number = -10;
       Serial.println(sig);
       Serial.println(number);
     }
-    isPressed = false;
+    isPressed1 = false;
+  }
+  
+  // Button 2 
+  // read the state of the pushbutton value:
+  buttonState2 = digitalRead(button2);
+  // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
+  if (buttonState2 == HIGH) {
+    isPressed2 = true;   
+    // turn LED on:
+    //digitalWrite(ledPin, HIGH);
+  } else {
+    if (isPressed2 == true) {
+      int sig = 1;
+      int number = -10;
+      Serial.println(sig);
+      Serial.println(number);
+    }
+    isPressed2 = false;
+  }
+  
+  // Button 3 
+  // read the state of the pushbutton value:
+  buttonState3 = digitalRead(button3);
+  // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
+  if (buttonState3 == HIGH) {
+    isPressed3 = true;   
+    // turn LED on:
+    //digitalWrite(ledPin, HIGH);
+  } else {
+    if (isPressed3 == true) {
+      int sig = 2;
+      int number = -10;
+      Serial.println(sig);
+      Serial.println(number);
+    }
+    isPressed3 = false;
   }
 
 
@@ -86,6 +131,7 @@ void loop() {
   // bend angle:
   float angle = map(flexR, STRAIGHT_RESISTANCE, BEND_RESISTANCE, 0, 90.0);
 
+  /*
   // SEND SIGNAL
   int sig = 3;
   Serial.println(sig); 
@@ -110,5 +156,5 @@ void loop() {
 
   // delay
   delay(100);
-  
+  */
 }
