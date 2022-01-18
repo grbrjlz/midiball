@@ -58,7 +58,10 @@ void loop() {
     //digitalWrite(ledPin, HIGH);
   } else {
     if (isPressed == true) {
-      Serial.print(0);
+      int sig = 0;
+      int number = -10;
+      Serial.println(sig);
+      Serial.println(number);
     }
     isPressed = false;
   }
@@ -76,18 +79,24 @@ void loop() {
   gyro_x = Wire.read()<<8 | Wire.read(); // reading registers: 0x43 (GYRO_XOUT_H) and 0x44 (GYRO_XOUT_L)
   gyro_y = Wire.read()<<8 | Wire.read(); // reading registers: 0x45 (GYRO_YOUT_H) and 0x46 (GYRO_YOUT_L)
   gyro_z = Wire.read()<<8 | Wire.read(); // reading registers: 0x47 (GYRO_ZOUT_H) and 0x48 (GYRO_ZOUT_L)
-  
+
+  int sig = 3;
+  //Serial.println(sig);
+  //Serial.println(gyro_x);
+  Serial.print(" | gY = "); Serial.print(convert_int16_to_str(gyro_y));
+  Serial.print(" | aY = "); Serial.println(convert_int16_to_str(accelerometer_y));
+  //Serial.print(" | gX = "); Serial.println(convert_int16_to_str(gyro_x));
   // print out data
-  Serial.print("aX = "); Serial.print(convert_int16_to_str(accelerometer_x));
+  /*Serial.print("aX = "); Serial.print(convert_int16_to_str(accelerometer_x));
   Serial.print(" | aY = "); Serial.print(convert_int16_to_str(accelerometer_y));
   Serial.print(" | aZ = "); Serial.print(convert_int16_to_str(accelerometer_z));
   // the following equation was taken from the documentation [MPU-6000/MPU-6050 Register Map and Description, p.30]
-  //Serial.print(" | tmp = "); Serial.print(temperature/340.00+36.53);
+  Serial.print(" | tmp = "); Serial.print(temperature/340.00+36.53);
   Serial.print(" | gX = "); Serial.print(convert_int16_to_str(gyro_x));
   Serial.print(" | gY = "); Serial.print(convert_int16_to_str(gyro_y));
   Serial.print(" | gZ = "); Serial.print(convert_int16_to_str(gyro_z));
   Serial.println();
-
+  */
   // Read the ADC, and calculate voltage and resistance from it
   /*int flexADC = analogRead(FLEX_PIN);
   float flexV = flexADC * VCC / 1023.0;
@@ -103,6 +112,6 @@ void loop() {
   */
   
   // delay
-  delay(1000);
+  delay(100);
   
 }
