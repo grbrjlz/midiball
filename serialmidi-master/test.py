@@ -38,7 +38,24 @@ while True:
         elif sig_value == 2:
             print("Button 3 klick")
         elif sig_value == 3:
-            print("gyro-X")
+            ## hoch runter beschleunigen
+            print("gyro-Y")
+            print(value)
+        elif sig_value == 4:
+            ## vor zurück beschleunigen
+            print("gyro-Z")
+            print(value)
+        elif sig_value == 5:
+            ## vor zurück neigen
+            print("acc-Y")
+            print(value)
+        elif sig_value == 6:
+            ## rechts links neigen
+            print("acc-Z")
+            print(value)
+        elif sig_value == 7:
+            ## bend sensor winkel
+            print("bend")
             print(value)
         else:
             print("!!!didnt match!!!")

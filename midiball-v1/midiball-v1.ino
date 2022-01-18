@@ -4,8 +4,7 @@
 const int MPU_ADDR = 0x68; // I2C address of the MPU-6050. If AD0 pin is set to HIGH, the I2C address will be 0x69.
 int16_t accelerometer_x, accelerometer_y, accelerometer_z; // variables for accelerometer raw data
 int16_t gyro_x, gyro_y, gyro_z; // variables for gyro raw data
-int16_t temperature; // variables for temperature data
-char tmp_str[7]; // temporary variable used in convert function
+// int16_t temperature; // variables for temperature data
 
 const int FLEX_PIN = A0; // Pin connected to voltage divider output
 // Measure the voltage at 5V and the actual resistance of your
@@ -13,7 +12,6 @@ const int FLEX_PIN = A0; // Pin connected to voltage divider output
 const float VCC = 4.98; // Measured voltage of Ardunio 5V line
 const float R_DIV = 47500.0; // Measured resistance of 3.3k resistor
 
-// Upload the code, then try to adjust these values to more
 // accurately calculate bend degree.
 const float STRAIGHT_RESISTANCE = 37300.0; // resistance when straight
 const float BEND_RESISTANCE = 90000.0; // resistance at 90 deg
@@ -22,11 +20,6 @@ const int buttonPin = 2;     // the number of the pushbutton pin
 // variables will change:
 int buttonState = 0;         // variable for reading the pushbutton status
 boolean isPressed = false;
-
-char* convert_int16_to_str(int16_t i) { // converts int16 to string. Moreover, resulting strings will have the same length in the debug monitor.
-  sprintf(tmp_str, "%6d", i);
-  return tmp_str;
-}
 
 
 void setup() {
@@ -47,8 +40,9 @@ void setup() {
 
 
 void loop() {
+
+  // BUTTONS 
   // read the state of the pushbutton value:
-  
   buttonState = digitalRead(buttonPin);
   //Serial.println(buttonState);
   // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
@@ -65,12 +59,13 @@ void loop() {
     }
     isPressed = false;
   }
-  
+
+
+  // GYRO 
   Wire.beginTransmission(MPU_ADDR);
   Wire.write(0x3B); // starting with register 0x3B (ACCEL_XOUT_H) [MPU-6000 and MPU-6050 Register Map and Descriptions Revision 4.2, p.40]
   Wire.endTransmission(false); // the parameter indicates that the Arduino will send a restart. As a result, the connection is kept active.
   Wire.requestFrom(MPU_ADDR, 7*2, true); // request a total of 7*2=14 registers
-  
   // "Wire.read()<<8 | Wire.read();" means two registers are read and stored in the same variable
   accelerometer_x = Wire.read()<<8 | Wire.read(); // reading registers: 0x3B (ACCEL_XOUT_H) and 0x3C (ACCEL_XOUT_L)
   accelerometer_y = Wire.read()<<8 | Wire.read(); // reading registers: 0x3D (ACCEL_YOUT_H) and 0x3E (ACCEL_YOUT_L)
@@ -80,37 +75,39 @@ void loop() {
   gyro_y = Wire.read()<<8 | Wire.read(); // reading registers: 0x45 (GYRO_YOUT_H) and 0x46 (GYRO_YOUT_L)
   gyro_z = Wire.read()<<8 | Wire.read(); // reading registers: 0x47 (GYRO_ZOUT_H) and 0x48 (GYRO_ZOUT_L)
 
-  int sig = 3;
-  //Serial.println(sig);
-  //Serial.println(gyro_x);
-  Serial.print(" | gY = "); Serial.print(convert_int16_to_str(gyro_y));
-  Serial.print(" | aY = "); Serial.println(convert_int16_to_str(accelerometer_y));
-  //Serial.print(" | gX = "); Serial.println(convert_int16_to_str(gyro_x));
-  // print out data
-  /*Serial.print("aX = "); Serial.print(convert_int16_to_str(accelerometer_x));
-  Serial.print(" | aY = "); Serial.print(convert_int16_to_str(accelerometer_y));
-  Serial.print(" | aZ = "); Serial.print(convert_int16_to_str(accelerometer_z));
-  // the following equation was taken from the documentation [MPU-6000/MPU-6050 Register Map and Description, p.30]
-  Serial.print(" | tmp = "); Serial.print(temperature/340.00+36.53);
-  Serial.print(" | gX = "); Serial.print(convert_int16_to_str(gyro_x));
-  Serial.print(" | gY = "); Serial.print(convert_int16_to_str(gyro_y));
-  Serial.print(" | gZ = "); Serial.print(convert_int16_to_str(gyro_z));
-  Serial.println();
-  */
+
+  // BEND
   // Read the ADC, and calculate voltage and resistance from it
-  /*int flexADC = analogRead(FLEX_PIN);
+  int flexADC = analogRead(FLEX_PIN);
   float flexV = flexADC * VCC / 1023.0;
   float flexR = R_DIV * (VCC / flexV - 1.0);
-  Serial.println("Resistance: " + String(flexR) + " ohms");
-
+  //Serial.println("Resistance: " + String(flexR) + " ohms");
   // Use the calculated resistance to estimate the sensor's
   // bend angle:
-  float angle = map(flexR, STRAIGHT_RESISTANCE, BEND_RESISTANCE,
-                   0, 90.0);
-  Serial.println("Bend: " + String(angle) + " degrees");
-  Serial.println();
-  */
+  float angle = map(flexR, STRAIGHT_RESISTANCE, BEND_RESISTANCE, 0, 90.0);
+
+  // SEND SIGNAL
+  int sig = 3;
+  Serial.println(sig); 
+  Serial.println(gyro_y);
+
+  sig = 4;
+  Serial.println(sig); 
+  Serial.println(gyro_z);
   
+  sig = 5;
+  Serial.println(sig); 
+  Serial.println(accelerometer_y);
+
+  sig = 6;
+  Serial.println(sig); 
+  Serial.println(accelerometer_z);
+  
+  int bend = angle;                
+  sig = 7;
+  Serial.println(sig); 
+  Serial.println(bend);
+
   // delay
   delay(100);
   
