@@ -6,11 +6,13 @@ import serial
 
 movie1 = "/home/pi/Videos/test.mp4"
 
-ser = serial.Serial('/dev/cu.usbmodem143301',9600)
+ser = serial.Serial('/dev/cu.usbmodem142101',9600)
 midiout = rtmidi.MidiOut()
 available_ports = midiout.get_ports()
 print(available_ports)
+gyroY = None
 while True:
+
     command = ser.readline()
 
     
@@ -25,7 +27,7 @@ while True:
             print("Button 1 klick")
             print("buttonValue: " + str(value))
             
-            """
+            
             if available_ports:
                 midiout.open_port(0)
                 with midiout:
@@ -35,12 +37,11 @@ while True:
                     time.sleep(0.5)
                     midiout.send_message(note_off)
                     time.sleep(0.1)
-            """
+            
         elif sig_value == 1:
             print("Button 2 klick")
             print("buttonValue: " + str(value))
             
-            """
             if available_ports:
                 midiout.open_port(0)
                 with midiout:
@@ -50,11 +51,11 @@ while True:
                     time.sleep(0.5)
                     midiout.send_message(note_off)
                     time.sleep(0.1)
-            """
+            
         elif sig_value == 2:
             print("Button 3 klick")
             print("buttonValue: " + str(value))
-            """
+            
             if available_ports:
                 midiout.open_port(0)
                 with midiout:
@@ -64,7 +65,7 @@ while True:
                     time.sleep(0.5)
                     midiout.send_message(note_off)
                     time.sleep(0.1)
-            """
+            
         elif sig_value == 3:
             ## hoch runter beschleunigen
             print("gyro-Y")
@@ -98,13 +99,51 @@ while True:
                     time.sleep(0.1)
             """
         elif sig_value == 5:
-            ## vor zurück neigen
-            print("acc-Y")
-            print(value)
             
+            ## vor zurück neigen
+            ##print("(eigentlich gyro-y) acc-Y")
+            ##print(value)
+            if gyroY is None: 
+                gyroY = value
+                continue
+
+            if value < (gyroY - 12000):
+                print("min")
+                if available_ports:
+                    midiout.open_port(0)
+
+                with midiout:
+                    note_on = [0x90, 65, 1] # channel 1, middle A, velocity 0
+                    note_off = [0x80, 65, 0] 
+                    midiout.send_message(note_on)
+                    time.sleep(0.5)
+                    midiout.send_message(note_off)
+                    time.sleep(0.1)
+
+            if value > (gyroY + 12000):
+                print("max")
+                with midiout:
+                    note_on = [0x90, 65, 112] # channel 1, middle A, velocity 112
+                    note_off = [0x80, 65, 0] 
+                    midiout.send_message(note_on)
+                    time.sleep(0.5)
+                    midiout.send_message(note_off)
+                    time.sleep(0.1)
+            if value > (gyroY + 1500):
+                print("drehung rechts")
+                print(value)
+            elif value < (gyroY - 1500):
+                print("drehung links")
+                print(value)
+                ## gyroY min / velocity min
+                ## -12.000 = 0
+                ## gyroY max / velocity max
+                ## +12.000 = 112
+
             """
             if available_ports:
                 midiout.open_port(0)
+
                 with midiout:
                     note_on = [0x90, 65, 112] # channel 1, middle A, velocity 112
                     note_off = [0x80, 65, 0] 
@@ -135,18 +174,18 @@ while True:
             ## bend sensor winkel
             print("bend")
             print(value)
-            
-            """
-            if available_ports:
-                midiout.open_port(0)
-                with midiout:
-                    note_on = [0x90, 67, 112] # channel 1, high C, velocity 112
-                    note_off = [0x80, 67, 0] 
-                    midiout.send_message(note_on)
-                    time.sleep(0.5)
-                    midiout.send_message(note_off)
-                    time.sleep(0.1)
-            """
+            if value > 500:
+                
+                if available_ports:
+                    midiout.open_port(0)
+                    with midiout:
+                        note_on = [0x90, 67, 112] # channel 1, high C, velocity 112
+                        note_off = [0x80, 67, 0] 
+                        midiout.send_message(note_on)
+                        time.sleep(0.5)
+                        midiout.send_message(note_off)
+                        time.sleep(0.1)
+                
             
         else:
             print("!!!didnt match!!!")

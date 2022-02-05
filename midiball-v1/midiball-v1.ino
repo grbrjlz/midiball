@@ -123,6 +123,7 @@ void loop() {
 
   // BEND
   // Read the ADC, and calculate voltage and resistance from it
+  
   int flexADC = analogRead(FLEX_PIN);
   float flexV = flexADC * VCC / 1023.0;
   float flexR = R_DIV * (VCC / flexV - 1.0);
@@ -131,30 +132,39 @@ void loop() {
   // bend angle:
   float angle = map(flexR, STRAIGHT_RESISTANCE, BEND_RESISTANCE, 0, 90.0);
 
-  /*
+  
   // SEND SIGNAL
-  int sig = 3;
+  
+  //int sig = 3;
+
+  // nach vorne stoßen ??
+  /*
   Serial.println(sig); 
   Serial.println(gyro_y);
-
-  sig = 4;
+  */
+  /*
+  int sig = 4;
   Serial.println(sig); 
   Serial.println(gyro_z);
   
-  sig = 5;
+  // 
+  */
+  int sig = 5;
   Serial.println(sig); 
   Serial.println(accelerometer_y);
-
+  /*
   sig = 6;
   Serial.println(sig); 
   Serial.println(accelerometer_z);
-  
+  */
+  /*
   int bend = angle;                
-  sig = 7;
+  int sig = 7;
   Serial.println(sig); 
   Serial.println(bend);
+  */
 
   // delay
   delay(100);
-  */
+  
 }
