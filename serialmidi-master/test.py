@@ -9,9 +9,15 @@ midiout = rtmidi.MidiOut()
 available_ports = midiout.get_ports()
 print(available_ports)
 gyroY = None
+gyroZ = None
+isRotatedBooleanZLeft = False
+isRotatedBooleanZRight = False
 isRotatedBooleanYRight = False
 isRotatedBooleanYLeft = False
-
+isPressed = False
+minPitch = 0
+maxPitch = 0
+editMode = False
 while True:
     command = ser.readline()
     
@@ -23,6 +29,11 @@ while True:
             
             print("Button 1 klick")
             print("buttonValue: " + str(value))
+
+            if editMode:
+                editMode = False
+            else:
+                editMode = True 
                     
             if available_ports:
                 midiout.open_port(0)
@@ -39,23 +50,23 @@ while True:
 
             print("Button 2 klick")
             print("buttonValue: " + str(value))
-            
+
             if available_ports:
                 midiout.open_port(0)
-
+                 
                 with midiout:
                     note_on = [0x90, 61, 112] # channel 1, middle D, velocity 112
                     note_off = [0x80, 61, 0] 
                     midiout.send_message(note_on)
-                    time.sleep(0.5)
-                    midiout.send_message(note_off)
                     time.sleep(0.1)
+                    midiout.send_message(note_off)
+
             
         elif sig_value == 2:
 
             print("Button 3 klick")
             print("buttonValue: " + str(value))
-            
+
             if available_ports:
                 midiout.open_port(0)
 
@@ -63,10 +74,9 @@ while True:
                     note_on = [0x90, 62, 112] # channel 1, middle E, velocity 112
                     note_off = [0x80, 62, 0] 
                     midiout.send_message(note_on)
-                    time.sleep(0.5)
-                    midiout.send_message(note_off)
                     time.sleep(0.1)
-            
+                    midiout.send_message(note_off)
+                         
         elif sig_value == 3:
         
             if value > 10000:
@@ -80,72 +90,43 @@ while True:
                         time.sleep(0.5)
                         midiout.send_message(note_off)
                         time.sleep(0.1)
-            
+
+
         elif sig_value == 4:
             
             print("gyro-Z")
             print(value)
+         
             
-            """
-            if available_ports:
-                midiout.open_port(0)
-                with midiout:
-                    note_on = [0x90, 64, 112] # channel 1, middle G, velocity 112
-                    note_off = [0x80, 64, 0] 
-                    midiout.send_message(note_on)
-                    time.sleep(0.5)
-                    midiout.send_message(note_off)
-                    time.sleep(0.1)
-            """
         elif sig_value == 5:
-            print(value)
+            #print(value)
             if gyroY is None: 
                 gyroY = value
                 continue
-            """
-            if value < (gyroY - 3000):
-               # print("min")
-               
-                if available_ports:
-                    midiout.open_port(0)
-
-                with midiout:
-                    note_on = [0x90, 65, 112] # channel 1, middle A, velocity 0
-                    note_off = [0x80, 65, 0] 
-                    midiout.send_message(note_on)
-                    time.sleep(0.5)
-                    midiout.send_message(note_off)
-                    time.sleep(0.1)
-
-            if value > (gyroY + 3000):
-               # print("max")
-
-                if available_ports:
-                    midiout.open_port(0)
-
-                with midiout:
-                    note_on = [0x90, 66, 112] # channel 1, middle A+1, velocity 112
-                    note_off = [0x80, 66, 0] 
-                    midiout.send_message(note_on)
-                    time.sleep(0.5)
-                    midiout.send_message(note_off)
-                    time.sleep(0.1)
-            """
+           
             if isRotatedBooleanYRight:
                 if value < (gyroY + 3500):
-                        isRotatedBooleanYRight = False
+                    isRotatedBooleanYRight = False
             elif value > (gyroY + 5000):
                 isRotatedBooleanYRight = True
 
                 if available_ports:
                     midiout.open_port(0)
 
-                with midiout:
-                    note_on = [0x90, 66, 112] # channel 1, middle A+1, velocity 112
-                    note_off = [0x80, 66, 0] 
-                    midiout.send_message(note_on)
-                    time.sleep(0.1)
-                    midiout.send_message(note_off)
+                if editMode:
+                    with midiout:
+                        note_on = [0x90, 68, 112] # channel 1, middle A+1, velocity 112
+                        note_off = [0x80, 68, 0] 
+                        midiout.send_message(note_on)
+                        time.sleep(0.1)
+                        midiout.send_message(note_off)
+                else: 
+                    with midiout:
+                        note_on = [0x90, 66, 112] # channel 1, middle A+1, velocity 112
+                        note_off = [0x80, 66, 0] 
+                        midiout.send_message(note_on)
+                        time.sleep(0.1)
+                        midiout.send_message(note_off)
 
                 print("drehung rechts")
                 print(value)
@@ -159,43 +140,115 @@ while True:
                 if available_ports:
                     midiout.open_port(0)
 
-                with midiout:
-                    note_on = [0x90, 65, 112] # channel 1, middle A, velocity 0
-                    note_off = [0x80, 65, 0] 
-                    midiout.send_message(note_on)
-                    time.sleep(0.1)
-                    midiout.send_message(note_off)
+                if editMode:
+                    with midiout:
+                        note_on = [0x90, 69, 112] # channel 1, middle A, velocity 0
+                        note_off = [0x80, 69, 0] 
+                        midiout.send_message(note_on)
+                        time.sleep(0.1)
+                        midiout.send_message(note_off)
+                else:
+                     with midiout:
+                        note_on = [0x90, 65, 112] # channel 1, middle A, velocity 0
+                        note_off = [0x80, 65, 0] 
+                        midiout.send_message(note_on)
+                        time.sleep(0.1)
+                        midiout.send_message(note_off)
                     
-
                 print("drehung Links")
                 print(value)
-            
-            
-            
+                
 
         elif sig_value == 6:
-            
-            print("acc-Z")
-            print(value)
-            
-            """
-            if available_ports:
-                midiout.open_port(0)
-                with midiout:
-                    note_on = [0x90, 66, 112] # channel 1, middle H, velocity 112
-                    note_off = [0x80, 65, 0] 
-                    midiout.send_message(note_on)
-                    time.sleep(0.5)
-                    midiout.send_message(note_off)
-                    time.sleep(0.1)
-            """
+            #print(value)
+            if gyroZ is None: 
+                gyroZ = value
+                continue
+           
+            if isRotatedBooleanZRight:
+                if value < (gyroZ + 3500):
+                    isRotatedBooleanZRight = False
+            elif value > (gyroZ + 5000):
+                isRotatedBooleanZRight = True
+
+                if available_ports:
+                    midiout.open_port(0)
+
+                if editMode:
+                    if maxPitch == 50 and minPitch > 0: 
+                        # von runtergepitcht auf normal
+                        minPitch = 50
+                        maxPitch = 65
+                    else:
+                        # von normal hoch pitchen
+                        minPitch = 65
+                        maxPitch = 78
+                    with midiout:
+                        for k in range(minPitch, maxPitch):
+                            fader = [0xE0, 10, k]
+                            midiout.send_message(fader)
+                            midiout.send_message(fader)
+                            time.sleep(0.01)
+
+                else: 
+                    with midiout:
+                        note_on = [0x91, 71, 112] # channel 1, middle A+1, velocity 112
+                        note_off = [0x81, 71, 0] 
+                        midiout.send_message(note_on)
+                        time.sleep(0.1)
+                        midiout.send_message(note_off)
+
+                print("drehung rechts")
+                print(value)
+
+            if isRotatedBooleanZLeft:
+                if value > (gyroZ - 3500):
+                    isRotatedBooleanZLeft = False
+            elif value < (gyroZ - 5000):
+                isRotatedBooleanZLeft = True
+
+                if available_ports:
+                    midiout.open_port(0)
+
+                if editMode:
+                    if maxPitch == 78:
+                        # von hochgepitcht auf normal
+                        minPitch = 78
+                        maxPitch = 63
+                    else:
+                        # von normal runter pitchen
+                        minPitch = 65
+                        maxPitch = 50
+                    with midiout:
+                        for k in range(minPitch, maxPitch, -1):
+                            fader = [0xE0, 10, k]
+                            midiout.send_message(fader)
+                            midiout.send_message(fader)
+                            time.sleep(0.01)
+
+                else:
+                     with midiout:
+                        note_on = [0x91, 73, 112] # channel 1, middle A, velocity 0
+                        note_off = [0x81, 73, 0] 
+                        midiout.send_message(note_on)
+                        time.sleep(0.1)
+                        midiout.send_message(note_off)
+                    
+                print("drehung Links")
+                print(value)
             
         elif sig_value == 7:
             """
             print("bend")
             print(value)
             """
-            if value > 150:    
+            if isPressed:
+                if value < 190:
+                    isPressed = False
+                
+            elif value > 210: 
+                isPressed = True
+
                 if available_ports:
                     midiout.open_port(0)
 
@@ -203,11 +256,9 @@ while True:
                         note_on = [0x90, 67, 112] # channel 1, high C, velocity 112
                         note_off = [0x80, 67, 0] 
                         midiout.send_message(note_on)
-                        time.sleep(0.5)
-                        midiout.send_message(note_off)
                         time.sleep(0.1)
+                        midiout.send_message(note_off)
                 
-            
         else:
             print("!!!didnt match!!!")
 

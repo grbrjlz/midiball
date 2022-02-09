@@ -144,17 +144,17 @@ void loop() {
   sig = 4;
   Serial.println(sig); 
   Serial.println(gyro_z);
-   
-  */
+   */
+  
   int sig = 5;
   Serial.println(sig); 
   Serial.println(accelerometer_y);
   
-  /*
+  
   sig = 6;
   Serial.println(sig); 
   Serial.println(accelerometer_z);
-  */
+  
  
   int bend = angle;                
   sig = 7;
