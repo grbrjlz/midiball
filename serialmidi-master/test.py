@@ -24,6 +24,7 @@ isRotatedBooleanYLeft = False
 isPressed = False
 aktPitch = 2
 editMode = False
+play = False
 
 # start program
 while True:
@@ -79,15 +80,29 @@ while True:
             print("Button 3 klick")
             print("buttonValue: " + str(value))
 
+            if play:
+                play = False
+            else:
+                play = True 
+
             if available_ports:
                 midiout.open_port(0)
 
-                with midiout:
-                    note_on = [0x90, 62, 112] # channel 1, middle D, velocity 112
-                    note_off = [0x80, 62, 0] 
-                    midiout.send_message(note_on)
-                    time.sleep(0.1)
-                    midiout.send_message(note_off)
+                if play:
+                    with midiout:
+                        note_on = [0x90, 62, 112] # channel 1, middle D, velocity 112
+                        note_off = [0x80, 62, 0] 
+                        midiout.send_message(note_on)
+                        time.sleep(0.1)
+                        midiout.send_message(note_off)
+                else:
+                    with midiout:
+                        note_on = [0x90, 63, 112] # channel 1, middle D, velocity 112
+                        note_off = [0x80, 63, 0] 
+                        midiout.send_message(note_on)
+                        time.sleep(0.1)
+                        midiout.send_message(note_off)
+
          
         # rotate midiball to front or to back
         elif sig_value == 3:
