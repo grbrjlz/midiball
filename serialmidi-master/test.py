@@ -25,6 +25,7 @@ isPressed = False
 aktPitch = 2
 editMode = False
 play = False
+rec = False
 
 # start program
 while True:
@@ -38,14 +39,13 @@ while True:
         
         # edit-button is pressed
         if sig_value == 0:
-            
-            print("Button 1 klick")
-            print("buttonValue: " + str(value))
 
             if editMode:
                 editMode = False
+                print("exit Edit-Mode")
             else:
-                editMode = True 
+                editMode = True
+                print("start Edit-Mode") 
                     
             if available_ports:
                 midiout.open_port(0)
@@ -60,9 +60,13 @@ while True:
         
         # record-button is pressed
         elif sig_value == 1:
-
-            print("Button 2 klick")
-            print("buttonValue: " + str(value))
+            
+            if rec:
+                rec = False
+                print("stopped recording")
+            else:
+                rec = True
+                print("start recording")
 
             if available_ports:
                 midiout.open_port(0)
@@ -77,13 +81,12 @@ while True:
         # play-button is pressed    
         elif sig_value == 2:
 
-            print("Button 3 klick")
-            print("buttonValue: " + str(value))
-
             if play:
                 play = False
+                print("stop")
             else:
-                play = True 
+                play = True
+                print("play") 
 
             if available_ports:
                 midiout.open_port(0)
@@ -102,11 +105,10 @@ while True:
                         midiout.send_message(note_on)
                         time.sleep(0.1)
                         midiout.send_message(note_off)
-
-         
+    
         # rotate midiball to front or to back
         elif sig_value == 3:
-            #print(value)
+            
             if gyroY is None: 
                 gyroY = value
                 continue
@@ -167,7 +169,7 @@ while True:
                 
         # rotate midiball left or right
         elif sig_value == 4:
-            #print(aktPitch)
+            
             if gyroZ is None: 
                 gyroZ = value
                 continue
@@ -269,10 +271,7 @@ while True:
 
         # midiball is pressed    
         elif sig_value == 5:
-            """
-            print("bend")
-            print(value)
-            """
+            
             if isPressed:
                 if value < 190:
                     isPressed = False
