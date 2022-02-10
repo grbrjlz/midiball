@@ -175,14 +175,14 @@ while True:
                     midiout.open_port(0)
 
                 if editMode:
-                    if maxPitch == 50 and minPitch > 0: 
+                    if maxPitch == 52 and minPitch > 0: 
                         # von runtergepitcht auf normal
-                        minPitch = 50
+                        minPitch = 52
                         maxPitch = 65
                     else:
                         # von normal hoch pitchen
                         minPitch = 65
-                        maxPitch = 78
+                        maxPitch = 76
                     with midiout:
                         for k in range(minPitch, maxPitch):
                             fader = [0xE0, 10, k]
@@ -211,14 +211,14 @@ while True:
                     midiout.open_port(0)
 
                 if editMode:
-                    if maxPitch == 78:
+                    if maxPitch == 76:
                         # von hochgepitcht auf normal
-                        minPitch = 78
+                        minPitch = 76
                         maxPitch = 63
                     else:
                         # von normal runter pitchen
-                        minPitch = 65
-                        maxPitch = 50
+                        minPitch = 63
+                        maxPitch = 52
                     with midiout:
                         for k in range(minPitch, maxPitch, -1):
                             fader = [0xE0, 10, k]
