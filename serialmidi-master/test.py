@@ -195,8 +195,8 @@ while True:
 
                 else: 
                     with midiout:
-                        note_on = [0x91, 71, 112] # channel 1, middle B, velocity 112
-                        note_off = [0x81, 71, 0] 
+                        note_on = [0x91, 62, 112] # channel 1, middle B, velocity 112
+                        note_off = [0x81, 62, 0] 
                         midiout.send_message(note_on)
                         time.sleep(0.1)
                         midiout.send_message(note_off)
@@ -242,9 +242,9 @@ while True:
                         aktPitch -= 1
 
                 else:
-                     with midiout:
-                        note_on = [0x91, 73, 112] # channel 1, high C#, velocity 0
-                        note_off = [0x81, 73, 0] 
+                    with midiout:
+                        note_on = [0x91, 60, 112] # channel 1, middle C, velocity 112
+                        note_off = [0x81, 60, 0] 
                         midiout.send_message(note_on)
                         time.sleep(0.1)
                         midiout.send_message(note_off)
