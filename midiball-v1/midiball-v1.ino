@@ -134,30 +134,19 @@ void loop() {
 
   
   // SEND SIGNAL
-  /*
+  
   int sig = 3;
-  /*
-  Serial.println(sig); 
-  Serial.println(gyro_y);
-  
-  /*
-  sig = 4;
-  Serial.println(sig); 
-  Serial.println(gyro_z);
-   */
-  
-  int sig = 5;
   Serial.println(sig); 
   Serial.println(accelerometer_y);
   
   
-  sig = 6;
+  sig = 4;
   Serial.println(sig); 
   Serial.println(accelerometer_z);
   
  
   int bend = angle;                
-  sig = 7;
+  sig = 5;
   Serial.println(sig); 
   Serial.println(bend);
   
